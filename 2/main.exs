@@ -31,16 +31,14 @@ defmodule Q2 do
   end
 
   def p1 do
-    nums = Utils.file_to_2d_int_array("input.txt")
-    nums
+    Utils.file_to_2d_int_array("input.txt")
       |> Enum.map(fn(innerArray) -> Q2.min_max_diff(innerArray) end)
       |> Enum.sum
       |> IO.inspect
   end
 
   def p2 do
-    nums = Utils.file_to_2d_int_array("input.txt")
-    nums
+    Utils.file_to_2d_int_array("input.txt")
       |> Enum.map(fn(innerArray) -> Q2.find_divisible(innerArray) end)
       |> Enum.sum
       |> IO.inspect
