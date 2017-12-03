@@ -25,11 +25,17 @@ defmodule Utils do
     end
   end
 
+  # Get a value nested map value, or a default value sif it doesn't exist
+  # Like lodash.get
   def get_nested(data, [hd | []], default) do
     data[hd] || default
   end
 
   def get_nested(data, [hd | tl], default) do
-    Utils.get_nested(data[hd], tl, default)
+    if data[hd] do
+      get_nested(data[hd], tl, default)
+    else
+      default
+    end
   end
 end
