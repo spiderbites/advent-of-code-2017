@@ -22,60 +22,76 @@ defmodule Q3 do
     [x, y-1]
   end
 
-  def next_direction('R'), do: 'U'
-  def next_direction('U'), do: 'L'
-  def next_direction('L'), do: 'D'
-  def next_direction('D'), do: 'R'
+  @next_direction %{
+    :R => :U,
+    :U => :L,
+    :L => :D,
+    :D => :R
+  }
 
-  def coords_func('R'), do: &Q3.right/1
-  def coords_func('U'), do: &Q3.up/1
-  def coords_func('L'), do: &Q3.left/1
-  def coords_func('D'), do: &Q3.down/1
-
-  # end state
-  def next(@input, coords, _, _, _, _) do
-    coords
-  end
-
-  # finished moving in direction
-  def next(num, coords, direction, 0, ringsize, 1) do
-    next(num, coords, Q3.next_direction(direction), ringsize, ringsize, 2)
-  end
-
-  def next(num, coords, direction, 0, ringsize, 2) do
-    next(num, coords, Q3.next_direction(direction), ringsize + 1, ringsize + 1, 1)
-  end
-
-  # continuing in direction
-  def next(num, coords, direction, remaining_steps, ringsize, iteration) do
-    next(num + 1, Q3.coords_func(direction).(coords), direction, remaining_steps - 1, ringsize, iteration)
-  end
+  @move_func %{
+    :R => &Q3.right/1,
+    :U => &Q3.up/1,
+    :L => &Q3.left/1,
+    :D => &Q3.down/1
+  }
 
   def p1 do
-    Q3.next(1, [0,0], 'R', 1, 1, 1)
+    walk_spiral(1, [0,0], :R, 1, 1, 1)
       |> Enum.map(fn(x) -> abs(x) end)
       |> Enum.sum
       |> IO.inspect
   end
 
-  # finished moving in direction
-  def p2next(num, coords, direction, 0, ringsize, 1, map) do
-    p2next(num, coords, Q3.next_direction(direction), ringsize, ringsize, 2, map)
+  # args are...
+  # num: the step number
+  # coords: the coords for this step
+  # direction: current direction we're moving in
+  # remaining_steps: num steps remaining for this direction
+  # ringsize: number of steps on this edge of the spiral
+  # iteration: 1 or 2, the time through for this ringsize
+  # (for part 2) map: a map of values for each coord, where m,n can be accessed at map[m][n]
+
+  # Reached the @input location, return its coords
+  def walk_spiral(@input, coords, _, _, _, _) do
+    coords
   end
 
-  def p2next(num, coords, direction, 0, ringsize, 2, map) do
-    p2next(num, coords, Q3.next_direction(direction), ringsize + 1, ringsize + 1, 1, map)
+  # finished moving in direction first time for ringsize
+  def walk_spiral(num, coords, direction, 0, ringsize, 1) do
+    walk_spiral(num, coords, @next_direction[direction], ringsize, ringsize, 2)
+  end
+
+  # finished moving in direction second time for ringsize
+  def walk_spiral(num, coords, direction, 0, ringsize, 2) do
+    walk_spiral(num, coords, @next_direction[direction], ringsize + 1, ringsize + 1, 1)
   end
 
   # continuing in direction
-  def p2next(num, coords, direction, remaining_steps, ringsize, iteration, map) do
-    value = Q3.sum_surrounding(coords, map)
+  def walk_spiral(num, coords, direction, remaining_steps, ringsize, iteration) do
+    walk_spiral(num + 1, @move_func[direction].(coords), direction, remaining_steps - 1, ringsize, iteration)
+  end
+
+
+
+  # finished moving in direction first time for ringsize
+  def walk_spiral_p2(num, coords, direction, 0, ringsize, 1, map) do
+    walk_spiral_p2(num, coords, @next_direction[direction], ringsize, ringsize, 2, map)
+  end
+
+  # finished moving in direction second time for ringsize
+  def walk_spiral_p2(num, coords, direction, 0, ringsize, 2, map) do
+    walk_spiral_p2(num, coords, @next_direction[direction], ringsize + 1, ringsize + 1, 1, map)
+  end
+
+  # continuing in direction
+  def walk_spiral_p2(num, coords, direction, remaining_steps, ringsize, iteration, map) do
+    value = sum_surrounding(coords, map)
     if value > @input do
       value
     else
-      [x, y] = coords
-      map = Utils.set_in(map, [x, y], value)
-      p2next(num + 1, Q3.coords_func(direction).(coords), direction, remaining_steps - 1, ringsize, iteration, map)
+      map = Utils.set_in(map, coords, value)
+      walk_spiral_p2(num + 1, @move_func[direction].(coords), direction, remaining_steps - 1, ringsize, iteration, map)
     end
   end
 
@@ -91,7 +107,7 @@ defmodule Q3 do
   end
 
   def p2 do
-    Q3.p2next(2, [1,0], 'U', 1, 1, 2, %{0 => %{0 => 1}})
+    walk_spiral_p2(2, [1,0], :U, 1, 1, 2, %{0 => %{0 => 1}})
       |> IO.inspect
   end
 end
