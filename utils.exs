@@ -15,6 +15,13 @@ defmodule Utils do
       |> Enum.map(fn(innerArray) -> Enum.map(innerArray, fn(x) -> String.to_integer(x) end) end)
   end
 
+  def file_to_2d_string_array(filepath) do
+    File.read(filepath)
+      |> elem(1)
+      |> String.split("\n")
+      |> Enum.map(fn(s) -> String.split(s) end)
+  end
+
   # Set a value in a nested map, up to two levels deep
   # creates the intermediary map if necessary
   def set_in(data, [k1, k2], value) do
@@ -37,5 +44,9 @@ defmodule Utils do
     else
       default
     end
+  end
+
+  def array_counts(list) do
+    Enum.reduce(list, %{}, fn(item, acc) -> Map.update(acc, item, 1, &(&1 + 1)) end)
   end
 end
