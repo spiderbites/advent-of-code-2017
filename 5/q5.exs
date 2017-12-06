@@ -1,4 +1,4 @@
-# note slow AF
+# note: using list - slow AF
 
 defmodule Q5 do
   Code.require_file "../utils.exs", __DIR__
@@ -40,4 +40,8 @@ end
 
 Q5.p1()
 Q5.p2()
+
+# Code.require_file "../benchmark.exs", __DIR__
+# IO.inspect Benchmark.measure(fn -> Q5.p1() end)
+# IO.inspect Benchmark.measure(fn -> Q5.p2() end)
 
