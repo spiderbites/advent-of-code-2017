@@ -56,4 +56,8 @@ defmodule Utils do
   def array_counts(list) do
     Enum.reduce(list, %{}, fn(item, acc) -> Map.update(acc, item, 1, &(&1 + 1)) end)
   end
+
+  def list_to_map(list) do
+    0..length(list)-1 |> Stream.zip(list) |> Enum.into(%{})
+  end
 end
