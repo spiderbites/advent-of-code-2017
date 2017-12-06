@@ -16,7 +16,7 @@ defmodule Q5 do
     if position > map_size(map) - 1 do
       steps
     else
-      value = map[position]
+      %{^position => value} = map
       if value >= 3 do
         jump_p2(Map.put(map, position, value - 1), position + value, steps + 1)
       else
