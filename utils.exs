@@ -14,6 +14,13 @@ defmodule Utils do
       |> Enum.map(fn(item) -> String.to_integer(item) end)
   end
 
+  def file_to_int_array_tabs(filepath) do
+    File.read(filepath)
+    |> elem(1)
+    |> String.split()
+    |> Enum.map(fn(item) -> String.to_integer(item) end)
+  end
+
   def file_to_2d_int_array(filepath) do
     File.read(filepath)
       |> elem(1)
