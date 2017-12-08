@@ -14,7 +14,7 @@ defmodule Utils do
       |> Enum.map(fn(item) -> String.to_integer(item) end)
   end
 
-  def file_to_int_array_tabs(filepath) do
+  def file_to_int_array_whitespace(filepath) do
     File.read(filepath)
     |> elem(1)
     |> String.split()
@@ -27,6 +27,12 @@ defmodule Utils do
       |> String.split("\n")
       |> Enum.map(fn(s) -> String.split(s) end)
       |> Enum.map(fn(innerArray) -> Enum.map(innerArray, fn(x) -> String.to_integer(x) end) end)
+  end
+
+  def file_to_string_array(filepath) do
+    File.read(filepath)
+     |> elem(1)
+     |> String.split("\n")
   end
 
   def file_to_2d_string_array(filepath) do
