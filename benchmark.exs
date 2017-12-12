@@ -7,4 +7,10 @@ defmodule Benchmark do
     |> elem(0)
     |> Kernel./(1_000_000)
   end
+
+  def measure_and_return(function) do
+    {time, value} = function |> :timer.tc
+    time = time |> Kernel./(1_000_000)
+    { value, time }
+  end
 end
