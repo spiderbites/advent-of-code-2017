@@ -44,17 +44,39 @@ defmodule Q11 do
     |> String.split(",")
   end
 
-  def p1 do
-    initial = %{"ne" => 0, "n" => 0, "nw" => 0, "se" => 0, "s" => 0, "sw" => 0}
-    counts = read_input() |> Utils.array_counts()
-    Map.merge(initial, counts)
+  def shortest_distance(step_map) do
+    step_map
     |> factor_opposites
     |> simplify_all
     |> Map.values
     |> Enum.sum
+  end
+
+  def find_longest(step, {step_map, furthest}) do
+    step_map = Map.put(step_map, step, step_map[step] + 1)
+    distance = shortest_distance(step_map)
+    {step_map, max(distance, furthest)}
+  end
+
+  def p1 do
+    counts = read_input() |> Utils.array_counts()
+    initial = %{"ne" => 0, "n" => 0, "nw" => 0, "se" => 0, "s" => 0, "sw" => 0}
+    Map.merge(initial, counts)
+    |> shortest_distance
+    |> IO.inspect
+  end
+
+  def p2 do
+    input = read_input()
+    furthest = -1
+    step_map = %{"ne" => 0, "n" => 0, "nw" => 0, "se" => 0, "s" => 0, "sw" => 0}
+
+    Enum.reduce(input, {step_map, furthest}, &find_longest/2)
+    |> elem(1)
     |> IO.inspect
   end
 
 end
 
 Q11.p1()
+Q11.p2()
