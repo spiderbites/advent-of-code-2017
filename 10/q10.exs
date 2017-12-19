@@ -64,7 +64,16 @@ defmodule Q10 do
     |> Enum.join
     |> IO.inspect
   end
+
+  def knot_hash(input_charlist) do
+    list = Enum.to_list 0..255
+    lengths = input_charlist |> Enum.concat([17, 31, 73, 47, 23])
+    compute_sparse_hash(lengths, list, 0, 0, 256, 0)
+    |> compute_dense_hash()
+    |> Enum.map(fn(x) -> Base.encode16(<<x>>, case: :lower) end)
+    |> Enum.join
+  end
 end
 
-Q10.p1()
-Q10.p2()
+# Q10.p1()
+# Q10.p2()

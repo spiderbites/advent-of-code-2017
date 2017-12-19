@@ -52,10 +52,11 @@ defmodule Q8 do
 
   def p1 do
     registers = build_register_map()
-    process_instructions(registers)
-      |> Map.values
-      |> Enum.max
-      |> IO.inspect
+    IO.inspect registers
+    # process_instructions(registers)
+    #   |> Map.values
+    #   |> Enum.max
+    #   |> IO.inspect
   end
 
   def p2 do
@@ -68,4 +69,4 @@ defmodule Q8 do
 end
 
 Q8.p1()
-Q8.p2()
+# Q8.p2()

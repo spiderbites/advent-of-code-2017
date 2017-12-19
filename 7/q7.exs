@@ -52,7 +52,7 @@ defmodule Q7 do
       { node, children_weights, stack_weights }
     else
       index = find_odd_one_out(stack_weights)
-      find_balanced_subtree(Enum.at(children, index), weights, relationships)
+      find_first_balanced_subtree(Enum.at(children, index), weights, relationships)
     end
   end
 
@@ -79,6 +79,8 @@ defmodule Q7 do
     file = Utils.file_to_string_array("input.txt")
     weights = Enum.reduce(file, %{}, &add_weight/2)
     relationships = Enum.reduce(file, %{}, &add_relationship/2)
+    # IO.inspect relationships
+    # IO.inspect weights
     root = MapSet.to_list(p1()) |> Enum.at(0)
 
     balanced_node = find_first_balanced_subtree(root, weights, relationships) |> IO.inspect
