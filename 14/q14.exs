@@ -71,4 +71,4 @@ defmodule Q14 do
 end
 
 # Q14.p1()
-# Q14.p2()
+Q14.p2()

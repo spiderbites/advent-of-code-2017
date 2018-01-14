@@ -84,3 +84,5 @@ const diff = 1000000000 % cycle
 for (let i = 0; i < diff; i++) {
   dance()
 }
+
+console.log(cycle)
